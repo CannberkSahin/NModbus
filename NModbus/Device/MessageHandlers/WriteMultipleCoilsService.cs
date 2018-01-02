@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
@@ -27,6 +28,7 @@ namespace NModbus.Device.MessageHandlers
                 .ToArray();
 
             dataStore.CoilDiscretes.WritePoints(request.StartAddress, points);
+            ((ISlaveDataStoreWithEventDispatcher)dataStore).DispatchAfterWriteMultipleCoils(request.StartAddress, points);
 
             return new WriteMultipleCoilsResponse(
                request.SlaveAddress,

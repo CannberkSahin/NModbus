@@ -27,7 +27,7 @@ namespace Samples
                 //StartModbusAsciiSlave();
                 //ModbusTcpMasterReadInputsFromModbusSlave();
                 //ModbusSerialAsciiMasterReadRegistersFromModbusSlave();
-                //StartModbusTcpSlave();
+                StartModbusTcpSlave();
                 //StartModbusUdpSlave();
                 //StartModbusAsciiSlave();
                 StartModbusSerialRtuSlaveNetwork().GetAwaiter().GetResult();
@@ -347,7 +347,11 @@ namespace Samples
             IModbusSlave slave1 = factory.CreateSlave(1);
             IModbusSlave slave2 = factory.CreateSlave(2);
 
-            network.AddSlave(slave1);
+            slave1.DataStore.BeforeReadHoldingInputRegisters += (sender, args) => { };
+            slave1.DataStore.AfterWriteMultipleCoils += (sender, args) => { };
+            slave1.DataStore.AfterWriteSingleCoil += (sender, args) => { };
+
+            network.AddSlave(slave1);   
             network.AddSlave(slave2);
 
             network.ListenAsync().GetAwaiter().GetResult();

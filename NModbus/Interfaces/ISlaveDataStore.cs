@@ -1,4 +1,8 @@
-﻿namespace NModbus
+﻿using System;
+using NModbus.Data;
+using NModbus.Events;
+
+namespace NModbus
 {
     /// <summary>
     /// Object simulation of a device memory map.
@@ -24,5 +28,9 @@
         /// Gets the input registers.
         /// </summary>
         IPointSource<ushort> InputRegisters { get; }
+
+        event EventHandler<BeforeReadHoldingInputRegistersEventArgs> BeforeReadHoldingInputRegisters;
+        event EventHandler<AfterWriteSingleCoilEventArgs> AfterWriteSingleCoil;
+        event EventHandler<AfterWriteMultipleCoilsEventArgs> AfterWriteMultipleCoils;
     }
 }

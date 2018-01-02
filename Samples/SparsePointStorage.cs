@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NModbus;
+using NModbus.Events;
 
 namespace Samples
 {
@@ -38,6 +39,17 @@ namespace Samples
         public SparsePointSource<ushort> InputRegisters
         {
             get { return _inputRegisters; }
+        }
+
+        public event EventHandler<BeforeReadHoldingInputRegistersEventArgs> BeforeReadHoldingInputRegisters;
+        public event EventHandler<AfterWriteSingleCoilEventArgs> AfterWriteSingleCoil;
+        public event EventHandler<AfterWriteMultipleCoilsEventArgs> AfterWriteMultipleCoils;
+
+        public void DispatchAllEvents()
+        {
+            this.BeforeReadHoldingInputRegisters?.Invoke(this, null);
+            this.AfterWriteSingleCoil?.Invoke(this, null);
+            this.AfterWriteMultipleCoils?.Invoke(this, null);
         }
 
         IPointSource<bool> ISlaveDataStore.CoilDiscretes

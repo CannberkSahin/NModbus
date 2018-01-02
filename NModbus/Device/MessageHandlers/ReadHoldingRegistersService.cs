@@ -1,4 +1,6 @@
-﻿using NModbus.Data;
+﻿using System.Collections.Generic;
+using NModbus.Data;
+using NModbus.Events;
 using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
@@ -22,6 +24,7 @@ namespace NModbus.Device.MessageHandlers
 
         protected override IModbusMessage Handle(ReadHoldingInputRegistersRequest request, ISlaveDataStore dataStore)
         {
+            ((ISlaveDataStoreWithEventDispatcher)dataStore).DispatchBeforeReadHoldingInputRegisters(request.StartAddress, request.NumberOfPoints);
             ushort[] registers = dataStore.HoldingRegisters.ReadPoints(request.StartAddress, request.NumberOfPoints);
 
             RegisterCollection data = new RegisterCollection(registers);

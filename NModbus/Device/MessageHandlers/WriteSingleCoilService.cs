@@ -1,4 +1,5 @@
-﻿using NModbus.Message;
+﻿using System.Collections.Generic;
+using NModbus.Message;
 
 namespace NModbus.Device.MessageHandlers
 {
@@ -26,7 +27,8 @@ namespace NModbus.Device.MessageHandlers
                 request.Data[0] == Modbus.CoilOn
             };
 
-             dataStore.CoilDiscretes.WritePoints(request.StartAddress, values);
+            dataStore.CoilDiscretes.WritePoints(request.StartAddress, values);
+            ((ISlaveDataStoreWithEventDispatcher)dataStore).DispatchAfterWriteSingleCoil(request.StartAddress, values[0]);
 
             return request;
         }
